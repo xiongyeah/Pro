@@ -34,7 +34,24 @@ public class Chessboard {
                 grid[i][j].setPiece(new ChessPiece(Util.RandomPick(new String[]{"💎", "⚪", "▲", "🔶"})));
             }
         }
-
+        for (int i = 0; i < Constant.CHESSBOARD_ROW_SIZE.getNum(); i++) {
+            for (int j = 0; j < Constant.CHESSBOARD_COL_SIZE.getNum(); j++) {
+                if (i > 1) {
+                    if (grid[i][j].getPiece().getName().equals(grid[i - 1][j].getPiece().getName()) && grid[i][j].getPiece().getName().equals(grid[i - 2][j].getPiece().getName())) {
+                        grid[i][j].setPiece(new ChessPiece(Util.RandomPick(new String[]{"💎", "⚪", "▲", "🔶"})));
+                        i = 0;
+                        j = 0;
+                    }
+                }
+                if (j > 1) {
+                    if (grid[i][j].getPiece().getName().equals(grid[i][j - 1].getPiece().getName()) && grid[i][j].getPiece().getName().equals(grid[i][j - 2].getPiece().getName())) {
+                        grid[i][j].setPiece(new ChessPiece(Util.RandomPick(new String[]{"💎", "⚪", "▲", "🔶"})));
+                        i = 0;
+                        j = 0;
+                    }
+                }
+            }
+        }
     }
 
     public ChessPiece getChessPieceAt(ChessboardPoint point) {
