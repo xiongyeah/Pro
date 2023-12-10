@@ -8,6 +8,8 @@ import view.CellComponent;
 import view.ChessComponent;
 import view.ChessboardComponent;
 
+import java.util.ArrayList;
+
 /**
  * Controller is the connection between model and view,
  * when a Controller receive a request from a view, the Controller
@@ -71,15 +73,33 @@ public class GameController implements GameListener {
 
     @Override
     public void onPlayerNextStep() {
-        // TODO: Init your next step function here.
-        for (int j = 0; j < 7; j++) {
-            for (int i = 0; i < 6; i++) {
+        // TODO: Init your next step function here
+        int[] array = new int[8];//记录每列有多少个被消除的
+        for (int j = 0; j < 8; j++) {
+            int count = 0;//只有第一次出现null才计入数组
+            for (int i = 0; i < 7; i++) {
                 if (model.getChessPieceAt(new ChessboardPoint(i, j)) != null && model.getChessPieceAt(new ChessboardPoint(i + 1, j)) == null) {
-                    model.setChessPiece(new ChessboardPoint(i + 1, j), model.getChessPieceAt(new ChessboardPoint(i, j)));
+                    int i1 = i;
+                    count ++;
+                    while (model.getChessPieceAt(new ChessboardPoint(i1 + 1, j)) == null) {
+                        i1++;
+                    }
+                    model.setChessPiece(new ChessboardPoint(i1, j), model.getChessPieceAt(new ChessboardPoint(i, j)));
                     model.removeChessPiece(new ChessboardPoint(i, j));
-                    view.removeChessComponentAtGrid(new ChessboardPoint(i, j));
+                    if (count == 1) {
+                        if (i1 - i <= i)
+                            array[j] = i1 - i;
+                        else
+                            array[j] = i + 1;
+                    }
                     i = -1;
                 }
+            }
+        }
+        for (int j = 0; j < 8; j++) {
+            for (int i = 0; i < array[j]; i++) {
+                view.removeChessComponentAtGrid(new ChessboardPoint(i, j));
+                model.removeChessPiece(new ChessboardPoint(i, j));
             }
         }
         view.initiateChessComponent(model);
@@ -202,7 +222,8 @@ public class GameController implements GameListener {
         point.setCountCol(countCol);
         return countRow > 2 || countCol > 2;
     }
-    public void remove(ChessboardPoint point){
+
+    public void remove(ChessboardPoint point) {
         if (point.countRow > 2) {
             if (point.getRow() >= 0 && point.getRow() < 8 && point.getCol() >= 0 && point.getCol() < 8) {
                 if (point.getRow() != 7 && model.getChessPieceAt(new ChessboardPoint(point.getRow() + 1, point.getCol())) != null) {
