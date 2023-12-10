@@ -44,7 +44,6 @@ public class ChessboardComponent extends JComponent {//棋盘组件
         for (int i = 0; i < CHESSBOARD_ROW_SIZE.getNum(); i++) {
             for (int j = 0; j < CHESSBOARD_COL_SIZE.getNum(); j++) {
                 // TODO: Implement the initialization checkerboard实现初始化棋盘
-
                 if (grid[i][j].getPiece() != null) {
                     ChessPiece chessPiece = grid[i][j].getPiece();
                     if (gridComponents[i][j].getComponentCount() != 0)
@@ -53,7 +52,6 @@ public class ChessboardComponent extends JComponent {//棋盘组件
                 }
             }
         }
-
     }
 
     public void initiateGridComponents() {
@@ -96,18 +94,19 @@ public class ChessboardComponent extends JComponent {//棋盘组件
     }
 
     private ChessboardPoint getChessboardPoint(Point point) {
-        System.out.println("[" + point.y/CHESS_SIZE +  ", " +point.x/CHESS_SIZE + "] Clicked");
-        return new ChessboardPoint(point.y/CHESS_SIZE, point.x/CHESS_SIZE);
+        System.out.println("[" + point.y / CHESS_SIZE + ", " + point.x / CHESS_SIZE + "] Clicked");
+        return new ChessboardPoint(point.y / CHESS_SIZE, point.x / CHESS_SIZE);
     }
+
     private Point calculatePoint(int row, int col) {
         return new Point(col * CHESS_SIZE, row * CHESS_SIZE);
     }
 
-    public void swapChess(){
+    public void swapChess() {
         gameController.onPlayerSwapChess();
     }
 
-    public void nextStep(){
+    public void nextStep() {
         gameController.onPlayerNextStep();
     }
 

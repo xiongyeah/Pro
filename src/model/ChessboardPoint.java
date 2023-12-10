@@ -7,10 +7,18 @@ package model;
 public class ChessboardPoint {
     private final int row;
     private final int col;
+    public int countRow;
+    public int countCol;
 
     public ChessboardPoint(int row, int col) {
         this.row = row;
         this.col = col;
+    }
+    public void setCountRow(int countRow){
+        this.countRow = countRow;
+    }
+    public void setCountCol(int countCol){
+        this.countCol = countCol;
     }
 
     public int getRow() {
