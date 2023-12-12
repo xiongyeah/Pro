@@ -70,6 +70,8 @@ public class GameController implements GameListener {
             }
             view.initiateChessComponent(model);
             view.repaint();
+            this.selectedPoint = null;
+            this.selectedPoint2 = null;
         }
     }
 
@@ -125,8 +127,6 @@ public class GameController implements GameListener {
         }
         view.initiateChessComponent(model);
         view.repaint();
-        this.selectedPoint = null;
-        this.selectedPoint2 = null;
         if (whichNext == true)
             System.out.println("There are still some match can be moved.");
         else {
