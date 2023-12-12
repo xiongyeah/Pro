@@ -1,9 +1,7 @@
 package controller;
 
 import listener.GameListener;
-import model.Constant;
-import model.Chessboard;
-import model.ChessboardPoint;
+import model.*;
 import view.CellComponent;
 import view.ChessComponent;
 import view.ChessboardComponent;
@@ -25,6 +23,9 @@ public class GameController implements GameListener {
     // Record whether there is a selected piece before
     private ChessboardPoint selectedPoint;
     private ChessboardPoint selectedPoint2;
+    public boolean whichNext = false;//记录按下nextStep按钮后是让棋子落下还是生成新棋子
+    public int score = 0;
+    public int step = 0;
 
     public GameController(ChessboardComponent view, Chessboard model) {
         this.view = view;
@@ -64,6 +65,7 @@ public class GameController implements GameListener {
             } else {
                 remove(selectedPoint);
                 remove(selectedPoint2);
+                step++;
                 System.out.println("[" + selectedPoint.getRow() + "," + selectedPoint.getCol() + "] and [" + selectedPoint2.getRow() + "," + selectedPoint2.getCol() + "] have been swapped.");
             }
             view.initiateChessComponent(model);
@@ -74,23 +76,31 @@ public class GameController implements GameListener {
     @Override
     public void onPlayerNextStep() {
         // TODO: Init your next step function here
-        int[] array = new int[8];//记录每列有多少个被消除的
+        int[] array = new int[]{0, 0, 0, 0, 0, 0, 0, 0};//记录消除区上方有多少个棋子
+        if (whichNext == true) {
+            for (int i = 0; i < 64; i++) {
+                ChessboardPoint point = new ChessboardPoint(i / 8, i % 8);
+                if (whetherEnoughToRemove(point)) {
+                    remove(point);
+                    view.initiateChessComponent(model);
+                    view.repaint();
+                }
+            }
+            whichNext = !whichNext;
+        }
         for (int j = 0; j < 8; j++) {
             int count = 0;//只有第一次出现null才计入数组
             for (int i = 0; i < 7; i++) {
                 if (model.getChessPieceAt(new ChessboardPoint(i, j)) != null && model.getChessPieceAt(new ChessboardPoint(i + 1, j)) == null) {
                     int i1 = i;
-                    count ++;
-                    while (model.getChessPieceAt(new ChessboardPoint(i1 + 1, j)) == null) {
+                    count++;
+                    while (i1 < 7 && model.getChessPieceAt(new ChessboardPoint(i1 + 1, j)) == null) {
                         i1++;
                     }
                     model.setChessPiece(new ChessboardPoint(i1, j), model.getChessPieceAt(new ChessboardPoint(i, j)));
                     model.removeChessPiece(new ChessboardPoint(i, j));
                     if (count == 1) {
-                        if (i1 - i <= i)
-                            array[j] = i1 - i;
-                        else
-                            array[j] = i + 1;
+                        array[j] = i + 1;
                     }
                     i = -1;
                 }
@@ -98,13 +108,26 @@ public class GameController implements GameListener {
         }
         for (int j = 0; j < 8; j++) {
             for (int i = 0; i < array[j]; i++) {
+                if (model.getChessPieceAt(new ChessboardPoint(i, j)) != null)
                 view.removeChessComponentAtGrid(new ChessboardPoint(i, j));
-                model.removeChessPiece(new ChessboardPoint(i, j));
+            }
+            for (int i = 0; i < 8; i++) {
+                if (model.getChessPieceAt(new ChessboardPoint(i, j)) == null)
+                    model.setChessPiece(new ChessboardPoint(i, j), new ChessPiece(Util.RandomPick(new String[]{"💎", "⚪", "▲", "🔶"})));
+            }
+        }
+        for (int i = 0; i < 64; i++) {
+            if (whetherEnoughToRemove(new ChessboardPoint(i / 8, i % 8))) {
+                whichNext = !whichNext;
+                break;
             }
         }
         view.initiateChessComponent(model);
         view.repaint();
+        this.selectedPoint = null;
+        this.selectedPoint2 = null;
         System.out.println("Implement your next step here.");
+        System.out.println(whichNext);
     }
 
     // click a cell with a chess
@@ -180,38 +203,38 @@ public class GameController implements GameListener {
 
     public boolean whetherEnoughToRemove(ChessboardPoint point) {
         int countRow = 1, countCol = 1;
-        if (point.getRow() >= 0 && point.getRow() < 8 && point.getCol() >= 0 && point.getCol() < 8) {
-            if (point.getCol() != 7) {
+        if (point.getRow() >= 0 && point.getRow() < 8 && point.getCol() >= 0 && point.getCol() < 8 && model.getChessPieceAt(new ChessboardPoint(point.getRow(), point.getCol())) != null) {
+            if (point.getCol() != 7 && model.getChessPieceAt(new ChessboardPoint(point.getRow(), point.getCol() + 1)) != null) {
                 if (model.getChessPieceAt(point).getName().equals(model.getChessPieceAt(new ChessboardPoint(point.getRow(), point.getCol() + 1)).getName())) {
                     countCol++;
-                    if (point.getCol() != 6) {
+                    if (point.getCol() != 6 && model.getChessPieceAt(new ChessboardPoint(point.getRow(), point.getCol() + 2)) != null) {
                         if (model.getChessPieceAt(point).getName().equals(model.getChessPieceAt(new ChessboardPoint(point.getRow(), point.getCol() + 2)).getName()))
                             countCol++;
                     }
                 }
             }
-            if (point.getCol() != 0) {
+            if (point.getCol() != 0 && model.getChessPieceAt(new ChessboardPoint(point.getRow(), point.getCol() - 1)) != null) {
                 if (model.getChessPieceAt(point).getName().equals(model.getChessPieceAt(new ChessboardPoint(point.getRow(), point.getCol() - 1)).getName())) {
                     countCol++;
-                    if (point.getCol() != 1) {
+                    if (point.getCol() != 1 && model.getChessPieceAt(new ChessboardPoint(point.getRow(), point.getCol() - 2)) != null) {
                         if (model.getChessPieceAt(point).getName().equals(model.getChessPieceAt(new ChessboardPoint(point.getRow(), point.getCol() - 2)).getName()))
                             countCol++;
                     }
                 }
             }
-            if (point.getRow() != 7) {
+            if (point.getRow() != 7 && model.getChessPieceAt(new ChessboardPoint(point.getRow() + 1, point.getCol())) != null) {
                 if (model.getChessPieceAt(point).getName().equals(model.getChessPieceAt(new ChessboardPoint(point.getRow() + 1, point.getCol())).getName())) {
                     countRow++;
-                    if (point.getRow() != 6) {
+                    if (point.getRow() != 6 && model.getChessPieceAt(new ChessboardPoint(point.getRow() + 2, point.getCol())) != null) {
                         if (model.getChessPieceAt(point).getName().equals(model.getChessPieceAt(new ChessboardPoint(point.getRow() + 2, point.getCol())).getName()))
                             countRow++;
                     }
                 }
             }
-            if (point.getRow() != 0) {
+            if (point.getRow() != 0 && model.getChessPieceAt(new ChessboardPoint(point.getRow() - 1, point.getCol())) != null) {
                 if (model.getChessPieceAt(point).getName().equals(model.getChessPieceAt(new ChessboardPoint(point.getRow() - 1, point.getCol())).getName())) {
                     countRow++;
-                    if (point.getRow() != 1) {
+                    if (point.getRow() != 1 && model.getChessPieceAt(new ChessboardPoint(point.getRow() - 2, point.getCol())) != null) {
                         if (model.getChessPieceAt(point).getName().equals(model.getChessPieceAt(new ChessboardPoint(point.getRow() - 2, point.getCol())).getName()))
                             countRow++;
                     }
@@ -230,10 +253,12 @@ public class GameController implements GameListener {
                     if (model.getChessPieceAt(point).getName().equals(model.getChessPieceAt(new ChessboardPoint(point.getRow() + 1, point.getCol())).getName())) {
                         view.removeChessComponentAtGrid(new ChessboardPoint(point.getRow() + 1, point.getCol()));
                         model.removeChessPiece(new ChessboardPoint(point.getRow() + 1, point.getCol()));
+                        score++;
                         if (point.getRow() != 6 && model.getChessPieceAt(new ChessboardPoint(point.getRow() + 2, point.getCol())) != null) {
                             if (model.getChessPieceAt(point).getName().equals(model.getChessPieceAt(new ChessboardPoint(point.getRow() + 2, point.getCol())).getName())) {
                                 view.removeChessComponentAtGrid(new ChessboardPoint(point.getRow() + 2, point.getCol()));
                                 model.removeChessPiece(new ChessboardPoint(point.getRow() + 2, point.getCol()));
+                                score++;
                             }
                         }
                     }
@@ -242,10 +267,12 @@ public class GameController implements GameListener {
                     if (model.getChessPieceAt(point).getName().equals(model.getChessPieceAt(new ChessboardPoint(point.getRow() - 1, point.getCol())).getName())) {
                         view.removeChessComponentAtGrid(new ChessboardPoint(point.getRow() - 1, point.getCol()));
                         model.removeChessPiece(new ChessboardPoint(point.getRow() - 1, point.getCol()));
+                        score++;
                         if (point.getRow() != 1 && model.getChessPieceAt(new ChessboardPoint(point.getRow() - 2, point.getCol())) != null) {
                             if (model.getChessPieceAt(point).getName().equals(model.getChessPieceAt(new ChessboardPoint(point.getRow() - 2, point.getCol())).getName())) {
                                 view.removeChessComponentAtGrid(new ChessboardPoint(point.getRow() - 2, point.getCol()));
                                 model.removeChessPiece(new ChessboardPoint(point.getRow() - 2, point.getCol()));
+                                score++;
                             }
                         }
                     }
@@ -253,15 +280,17 @@ public class GameController implements GameListener {
             }
         }
         if (point.countCol > 2) {
-            if (point.getRow() > 1 && point.getRow() < 6 && point.getCol() > 1 && point.getCol() < 6) {
+            if (point.getRow() >= 0 && point.getRow() < 8 && point.getCol() >= 0 && point.getCol() < 8) {
                 if (point.getCol() != 7 && model.getChessPieceAt(new ChessboardPoint(point.getRow(), point.getCol() + 1)) != null) {
                     if (model.getChessPieceAt(point).getName().equals(model.getChessPieceAt(new ChessboardPoint(point.getRow(), point.getCol() + 1)).getName())) {
                         view.removeChessComponentAtGrid(new ChessboardPoint(point.getRow(), point.getCol() + 1));
                         model.removeChessPiece(new ChessboardPoint(point.getRow(), point.getCol() + 1));
+                        score++;
                         if (point.getCol() != 6 && model.getChessPieceAt(new ChessboardPoint(point.getRow(), point.getCol() + 2)) != null) {
                             if (model.getChessPieceAt(point).getName().equals(model.getChessPieceAt(new ChessboardPoint(point.getRow(), point.getCol() + 2)).getName())) {
                                 view.removeChessComponentAtGrid(new ChessboardPoint(point.getRow(), point.getCol() + 2));
                                 model.removeChessPiece(new ChessboardPoint(point.getRow(), point.getCol() + 2));
+                                score++;
                             }
                         }
                     }
@@ -270,10 +299,12 @@ public class GameController implements GameListener {
                     if (model.getChessPieceAt(point).getName().equals(model.getChessPieceAt(new ChessboardPoint(point.getRow(), point.getCol() - 1)).getName())) {
                         view.removeChessComponentAtGrid(new ChessboardPoint(point.getRow(), point.getCol() - 1));
                         model.removeChessPiece(new ChessboardPoint(point.getRow(), point.getCol() - 1));
+                        score++;
                         if (point.getCol() != 1 && model.getChessPieceAt(new ChessboardPoint(point.getRow(), point.getCol() - 2)) != null) {
                             if (model.getChessPieceAt(point).getName().equals(model.getChessPieceAt(new ChessboardPoint(point.getRow(), point.getCol() - 2)).getName())) {
                                 view.removeChessComponentAtGrid(new ChessboardPoint(point.getRow(), point.getCol() - 2));
                                 model.removeChessPiece(new ChessboardPoint(point.getRow(), point.getCol() - 2));
+                                score++;
                             }
                         }
                     }
@@ -283,6 +314,7 @@ public class GameController implements GameListener {
         if (point.countRow > 2 || point.countCol > 2) {
             view.removeChessComponentAtGrid(new ChessboardPoint(point.getRow(), point.getCol()));
             model.removeChessPiece(new ChessboardPoint(point.getRow(), point.getCol()));
+            score++;
         }
     }
 }
