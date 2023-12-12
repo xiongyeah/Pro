@@ -76,6 +76,7 @@ public class GameController implements GameListener {
     @Override
     public void onPlayerNextStep() {
         // TODO: Init your next step function here
+        int staticScore = score;
         int[] array = new int[]{0, 0, 0, 0, 0, 0, 0, 0};//记录消除区上方有多少个棋子
         if (whichNext == true) {
             for (int i = 0; i < 64; i++) {
@@ -109,7 +110,7 @@ public class GameController implements GameListener {
         for (int j = 0; j < 8; j++) {
             for (int i = 0; i < array[j]; i++) {
                 if (model.getChessPieceAt(new ChessboardPoint(i, j)) != null)
-                view.removeChessComponentAtGrid(new ChessboardPoint(i, j));
+                    view.removeChessComponentAtGrid(new ChessboardPoint(i, j));
             }
             for (int i = 0; i < 8; i++) {
                 if (model.getChessPieceAt(new ChessboardPoint(i, j)) == null)
@@ -126,8 +127,13 @@ public class GameController implements GameListener {
         view.repaint();
         this.selectedPoint = null;
         this.selectedPoint2 = null;
-        System.out.println("Implement your next step here.");
-        System.out.println(whichNext);
+        if (whichNext == true)
+            System.out.println("There are still some match can be moved.");
+        else {
+            System.out.println("Nothing can be moved,please continue your next step.");
+            score = staticScore;
+            System.out.println(score * 10 + " " + step);
+        }
     }
 
     // click a cell with a chess
