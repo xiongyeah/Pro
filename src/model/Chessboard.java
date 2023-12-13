@@ -1,11 +1,10 @@
 package model;
 
-import java.awt.*;
 import java.util.Random;
 
 /**
  * This class store the real chess information.
- * The Chessboard has 8 * 8 cells, and each cell has a position for chess网格
+ * The Chessboard has 8 * 8 cells, and each cell has a position for chess
  */
 public class Chessboard {
     private Cell[][] grid;
@@ -26,7 +25,7 @@ public class Chessboard {
         }
     }
 
-    private void initPieces(int randomSeed) {
+    public void initPieces(int randomSeed) {
         Random random = new Random(randomSeed);
 
         for (int i = 0; i < Constant.CHESSBOARD_ROW_SIZE.getNum(); i++) {
@@ -83,10 +82,10 @@ public class Chessboard {
         setChessPiece(point1, p2);
         setChessPiece(point2, p1);
     }
-
     public Cell[][] getGrid() {
         return grid;
     }
+
 
 
 }

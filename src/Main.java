@@ -1,15 +1,24 @@
 import controller.GameController;
 import model.Chessboard;
 import view.ChessGameFrame;
+import view.ChessLogin;
+import view.LoseFrame;
+import view.winFrame;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class Main {
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            ChessGameFrame mainFrame = new ChessGameFrame(1100, 810);
-            GameController gameController = new GameController(mainFrame.getChessboardComponent(), new Chessboard(0));
-            mainFrame.setVisible(true);
+            //LoseFrame lose = new LoseFrame(769, 800);
+            //lose.setVisible(true);
+            //winFrame win=new winFrame(750,730);
+            //win.setVisible(true);
+            ChessLogin loginFrame=new ChessLogin();
+            loginFrame.setVisible(true);
         });
     }
+
 }

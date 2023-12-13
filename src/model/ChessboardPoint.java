@@ -20,7 +20,6 @@ public class ChessboardPoint {
     public void setCountCol(int countCol){
         this.countCol = countCol;
     }
-
     public int getRow() {
         return row;
     }

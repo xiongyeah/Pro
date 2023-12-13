@@ -4,8 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * This is the equivalent of the Cell class,单元格类
- * but this class only cares how to draw Cells on ChessboardComponent只绘制单元格
+ * This is the equivalent of the Cell class,
+ * but this class only cares how to draw Cells on ChessboardComponent
  */
 
 public class CellComponent extends JPanel {

@@ -8,7 +8,7 @@ import java.awt.*;
 
 /**
  * This is the equivalent of the ChessPiece class,
- * but this class only cares how to draw Chess on ChessboardComponent只绘制象棋
+ * but this class only cares how to draw Chess on ChessboardComponent
  */
 public class ChessComponent extends JComponent {
 
@@ -43,7 +43,7 @@ public class ChessComponent extends JComponent {
         g2.setColor(this.chessPiece.getColor());
         g2.drawString(this.chessPiece.getName() , getWidth() / 4, getHeight() * 5 / 8); // FIXME: Use library to find the correct offset.
         if (isSelected()) { // Highlights the model if selected.
-            g.setColor(Color.gray);
+            g.setColor(Color.blue);
             g.drawOval(0, 0, getWidth(), getHeight());
         }
     }
