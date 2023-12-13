@@ -26,7 +26,7 @@ public class LoseFrame extends JFrame {
 
     private void addExit() {
         JButton Ex=new JButton();
-        ImageIcon RE=new ImageIcon("C:\\Users\\Tim\\IdeaProjects\\Pro\\src\\picture\\loseExit.png");
+        ImageIcon RE=new ImageIcon(".\\src\\picture\\loseExit.png");
         Ex.setIcon(RE);
         setFont(new Font("Rockwell", Font.BOLD, 100));
         Ex.setBounds(162, 643, 473, 125);
@@ -36,7 +36,7 @@ public class LoseFrame extends JFrame {
 
     private void addRestartButton(){
         JButton Restart=new JButton();
-        ImageIcon RE=new ImageIcon("C:\\Users\\Tim\\IdeaProjects\\Pro\\src\\picture\\loseRestart.png");
+        ImageIcon RE=new ImageIcon(".\\src\\picture\\loseRestart.png");
         Restart.setIcon(RE);
         setFont(new Font("Rockwell", Font.BOLD, 40));
         Restart.setBounds(162, 478, 470, 120);
@@ -53,7 +53,7 @@ public class LoseFrame extends JFrame {
     }
 
     private void addBackground(){
-        ImageIcon bg=new ImageIcon("C:\\Users\\Tim\\IdeaProjects\\Pro\\src\\picture\\loseBackground.png");
+        ImageIcon bg=new ImageIcon(".\\src\\picture\\loseBackground.png");
         JLabel bagr=new JLabel(bg);
         bagr.setBounds(0,0,792,800);
         bagr.setLocation(-30,0);

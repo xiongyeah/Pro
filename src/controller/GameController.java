@@ -78,8 +78,6 @@ public class GameController implements GameListener {
             view.labelScores.setText("Scores:" + view.getScores());
             view.initiateChessComponent(model);
             view.repaint();
-            this.selectedPoint = null;
-            this.selectedPoint2 = null;
         }
     }
 
@@ -259,11 +257,17 @@ public class GameController implements GameListener {
             System.out.println("Nothing can be moved,please continue your next step.");
             view.setScores(staticScore);
         }
+        this.selectedPoint = null;
+        this.selectedPoint2 = null;
     }
 
     // click a cell with a chess
     @Override
     public void onPlayerClickChessPiece(ChessboardPoint point, ChessComponent component) {
+        if (selectedPoint != null && selectedPoint2 != null){
+            System.out.println("Please click the NextStep button");
+            return;
+        }
         if (selectedPoint2 != null) {
             var distance2point1 = Math.abs(selectedPoint.getCol() - point.getCol()) + Math.abs(selectedPoint.getRow() - point.getRow());
             var distance2point2 = Math.abs(selectedPoint2.getCol() - point.getCol()) + Math.abs(selectedPoint2.getRow() - point.getRow());

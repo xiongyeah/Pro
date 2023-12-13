@@ -29,7 +29,7 @@ public class ChessGameFrame extends JFrame {
     private int Gscores;
     private int MSteps;
     private ChessboardComponent chessboardComponent;
-    private int shuffletime=3;
+    private int shuffletime = 3;
 
     public ChessGameFrame(int width, int height, int Steps, int Scores) {
         setTitle("2023 CS109 Project Demo"); //设置标题
@@ -43,7 +43,7 @@ public class ChessGameFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE); //设置程序关闭按键，如果点击右上方的叉就游戏全部关闭了
         setLayout(null);
 
-        playSound("C:\\Users\\Tim\\IdeaProjects\\Pro\\src\\picture\\6.wav");
+        playSound(".\\src\\picture\\6.wav");
 
         addJMueBar();
         addLabelMaxSteps();
@@ -73,6 +73,7 @@ public class ChessGameFrame extends JFrame {
         } catch (Exception ex) {
         }
     }
+
     public void setGscores(int gscores) {
         Gscores = gscores;
     }
@@ -82,7 +83,7 @@ public class ChessGameFrame extends JFrame {
     }
 
     public void addBack() {
-        ImageIcon back = new ImageIcon("C:\\Users\\Tim\\IdeaProjects\\Pro\\src\\picture\\backGround.png");
+        ImageIcon back = new ImageIcon(".\\src\\picture\\backGround.png");
         JLabel bg = new JLabel(back);
         bg.setLocation(0, 0);
         bg.setBounds(-50, 0, 1408, 780);
@@ -129,7 +130,7 @@ public class ChessGameFrame extends JFrame {
         });
 
         Corp.addActionListener(e -> {
-            AboutFrame a=new AboutFrame();
+            AboutFrame a = new AboutFrame();
             a.setDefaultCloseOperation(2);
             a.setVisible(true);
         });//❗️❗️❗️
@@ -145,37 +146,38 @@ public class ChessGameFrame extends JFrame {
         public AboutFrame() {
             setTitle("About us");
             addAll();
-            setSize(200,200);
+            setSize(200, 200);
             setLocationRelativeTo(null);
             setLayout(null);
             setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         }
-        private void addAll(){
-            JLabel All1=new JLabel("前段编写：12212762 王苓郦");
-            JLabel All2=new JLabel("后端编写：12311103 熊烨");
+
+        private void addAll() {
+            JLabel All1 = new JLabel("前段编写：12212762 王苓郦");
+            JLabel All2 = new JLabel("后端编写：12311103 熊烨");
             All1.setFont(new Font("宋体", Font.BOLD, 12));
             All2.setFont(new Font("宋体", Font.BOLD, 12));
             All1.setVisible(true);
-            All1.setLocation(20,0);
-            All1.setSize(200,100);
+            All1.setLocation(20, 0);
+            All1.setSize(200, 100);
             add(All1);
             All2.setVisible(true);
-            All2.setLocation(20,30);
-            All2.setSize(200,100);
+            All2.setLocation(20, 30);
+            All2.setSize(200, 100);
             add(All2);
         }
     }//❗️❗️❗️
 
     private void addChessboard() {
         chessboardComponent = new ChessboardComponent(ONE_CHESS_SIZE);
-        chessboardComponent.setLocation(HEIGTH / 5-70, HEIGTH / 10);
+        chessboardComponent.setLocation(HEIGTH / 5 - 70, HEIGTH / 10);
         add(chessboardComponent);
         chessboardComponent.labelStep = Steps;
         chessboardComponent.labelScores = Scores;
         chessboardComponent.lableGoalScores = GoalScores;
         chessboardComponent.lableMaxSteps = MaxSteps;
-        chessboardComponent.shuffle=shuffle;
-        chessboardComponent.ShuffleTime=shuffletime;
+        chessboardComponent.shuffle = shuffle;
+        chessboardComponent.ShuffleTime = shuffletime;
     }
 
     public ChessboardComponent getChessboardComponent() {
@@ -236,10 +238,10 @@ public class ChessGameFrame extends JFrame {
      */
     private void addShuffleButton() {
         UIManager.put("Button.foreground", Color.BLACK);
-        JButton button = new JButton("Shuffle!\n"+shuffletime);
-        shuffle=button;
+        JButton button = new JButton("Shuffle!\n" + shuffletime);
+        shuffle = button;
         button.addActionListener((e) -> chessboardComponent.Shuffle());
-        button.setLocation(HEIGTH, HEIGTH / 10 +360);
+        button.setLocation(HEIGTH, HEIGTH / 10 + 360);
         button.setSize(200, 60);
         button.setFont(new Font("Rockwell", Font.BOLD, 20));
         add(button);
@@ -269,7 +271,7 @@ public class ChessGameFrame extends JFrame {
     class SoundButtonListener1 implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            playSound("C:\\Users\\Tim\\IdeaProjects\\Pro\\src\\picture\\8.wav");
+            playSound(".\\src\\picture\\8.wav");
         }
 
         private void playSound(String soundFilePath) {
@@ -295,10 +297,11 @@ public class ChessGameFrame extends JFrame {
         button.setFont(new Font("Rockwell", Font.BOLD, 20));
         add(button);
     }
+
     class SoundButtonListener2 implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            playSound("C:\\Users\\Tim\\IdeaProjects\\Pro\\src\\picture\\next.wav");
+            playSound(".\\src\\picture\\next.wav");
         }
 
         private void playSound(String soundFilePath) {

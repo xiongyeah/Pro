@@ -28,7 +28,7 @@ public class ChessLogin extends JFrame {
     }
 
     private void addBack() {
-        ImageIcon bg=new ImageIcon("C:\\Users\\Tim\\IdeaProjects\\Pro\\src\\picture\\loginBackground.png");
+        ImageIcon bg=new ImageIcon(".\\src\\picture\\loginBackground.png");
         JLabel back=new JLabel(bg);
         back.setBounds(0,0,400,500);
         back.setLocation(0,0);

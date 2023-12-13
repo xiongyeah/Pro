@@ -31,6 +31,7 @@ public class ChessboardComponent extends JComponent {
     public JLabel lableMaxSteps;
     public JLabel labelStep;
     public JLabel labelScores;
+    private boolean whetherSwap = true;
     public void addStep(int n) {
         step = step+n;
     }
@@ -166,11 +167,16 @@ public class ChessboardComponent extends JComponent {
     }
 
     public void swapChess(){
-        gameController.onPlayerSwapChess();
+        if (whetherSwap == true) {
+            gameController.onPlayerSwapChess();
+            this.whetherSwap = false;
+        }else
+            System.out.println("Please click the NextStep button");
     }
 
     public void nextStep(){
         gameController.onPlayerNextStep();
+        this.whetherSwap = true;
     }
 
     public void newChessboard(){

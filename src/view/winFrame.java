@@ -15,7 +15,7 @@ public class winFrame extends JFrame {
     }
 
     private void addBackground(){
-        ImageIcon bg=new ImageIcon("C:\\Users\\Tim\\IdeaProjects\\Pro\\src\\picture\\winBackground.png");
+        ImageIcon bg=new ImageIcon(".\\src\\picture\\winBackground.png");
         System.out.println(bg.toString());
         JLabel bagr=new JLabel(bg);
         bagr.setBounds(0,0,750,1000);
@@ -23,7 +23,7 @@ public class winFrame extends JFrame {
         add(bagr);
     }
     private void addAgain(){
-        ImageIcon ag=new ImageIcon("C:\\Users\\Tim\\IdeaProjects\\Pro\\src\\picture\\winAgain.png");
+        ImageIcon ag=new ImageIcon(".\\src\\picture\\winAgain.png");
         JButton Again=new JButton();
         Again.setIcon(ag);
         Again.setBounds(0,0,200,79);
@@ -36,7 +36,7 @@ public class winFrame extends JFrame {
         add(Again);
     }
     private void addExit(){
-        ImageIcon ag=new ImageIcon("C:\\Users\\Tim\\IdeaProjects\\Pro\\src\\picture\\winExit.png");
+        ImageIcon ag=new ImageIcon(".\\src\\picture\\winExit.png");
         JButton Exit=new JButton();
         Exit.setIcon(ag);
         Exit.setBounds(0,0,200,79);
