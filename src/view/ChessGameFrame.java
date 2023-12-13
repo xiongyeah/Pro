@@ -43,7 +43,7 @@ public class ChessGameFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE); //设置程序关闭按键，如果点击右上方的叉就游戏全部关闭了
         setLayout(null);
 
-        playSound("\\6.wav");
+        playSound("C:\\Users\\Tim\\IdeaProjects\\Pro\\src\\picture\\6.wav");
 
         addJMueBar();
         addLabelMaxSteps();
@@ -82,7 +82,7 @@ public class ChessGameFrame extends JFrame {
     }
 
     public void addBack() {
-        ImageIcon back = new ImageIcon("\\7.png");
+        ImageIcon back = new ImageIcon("C:\\Users\\Tim\\IdeaProjects\\Pro\\src\\picture\\backGround.png");
         JLabel bg = new JLabel(back);
         bg.setLocation(0, 0);
         bg.setBounds(-50, 0, 1408, 780);
@@ -269,7 +269,7 @@ public class ChessGameFrame extends JFrame {
     class SoundButtonListener1 implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            playSound("\\8.wav");
+            playSound("C:\\Users\\Tim\\IdeaProjects\\Pro\\src\\picture\\8.wav");
         }
 
         private void playSound(String soundFilePath) {
@@ -298,7 +298,7 @@ public class ChessGameFrame extends JFrame {
     class SoundButtonListener2 implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            playSound("\\next.wav");
+            playSound("C:\\Users\\Tim\\IdeaProjects\\Pro\\src\\picture\\next.wav");
         }
 
         private void playSound(String soundFilePath) {

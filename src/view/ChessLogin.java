@@ -28,7 +28,7 @@ public class ChessLogin extends JFrame {
     }
 
     private void addBack() {
-        ImageIcon bg=new ImageIcon("C:\\Users\\Tim\\IdeaProjects\\Pro\\loginBackground.png");
+        ImageIcon bg=new ImageIcon("C:\\Users\\Tim\\IdeaProjects\\Pro\\src\\picture\\loginBackground.png");
         JLabel back=new JLabel(bg);
         back.setBounds(0,0,400,500);
         back.setLocation(0,0);
@@ -55,7 +55,7 @@ public class ChessLogin extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
                 UIManager.put("Button.foreground", Color.BLACK);
-                ChessGameFrame mainFrame = new ChessGameFrame(1100, 810,10,1200);
+                ChessGameFrame mainFrame = new ChessGameFrame(1100, 810,10,350);
                 GameController gameController = new GameController(mainFrame.getChessboardComponent(), new Chessboard(0));
                 mainFrame.setVisible(true);
             }
