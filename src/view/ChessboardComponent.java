@@ -20,23 +20,25 @@ public class ChessboardComponent extends JComponent {
     private final CellComponent[][] gridComponents = new CellComponent[CHESSBOARD_ROW_SIZE.getNum()][CHESSBOARD_COL_SIZE.getNum()];
     private final int CHESS_SIZE;
     private final Set<ChessboardPoint> riverCell = new HashSet<>();
-    public int step=0;
-    public int scores=0;
+    public int step = 0;
+    public int scores = 0;
 
-    private  int goalscores;
-    private  int MaxSteps;
+    private int goalscores;
+    private int MaxSteps;
     public JButton shuffle;
-    public int ShuffleTime=3;
+    public int ShuffleTime = 3;
     public JLabel lableGoalScores;
     public JLabel lableMaxSteps;
     public JLabel labelStep;
     public JLabel labelScores;
-    private boolean whetherSwap = true;
+    public boolean whetherSwap = true;
+
     public void addStep(int n) {
-        step = step+n;
+        step = step + n;
     }
-    public void setScores(int n){
-        scores=n;
+
+    public void setScores(int n) {
+        scores = n;
     }
 
     public void setStep(int n) {
@@ -48,7 +50,7 @@ public class ChessboardComponent extends JComponent {
     }
 
     public void addScores(int n) {
-        scores = scores+n;
+        scores = scores + n;
     }
 
     public int getScores() {
@@ -79,10 +81,11 @@ public class ChessboardComponent extends JComponent {
         ShuffleTime = shuffleTime;
     }
 
-    public void deShuffle(){
+    public void deShuffle() {
         ShuffleTime--;
     }
-    public int getCHESS_SIZE(){
+
+    public int getCHESS_SIZE() {
         return CHESS_SIZE;
     }
 
@@ -100,6 +103,7 @@ public class ChessboardComponent extends JComponent {
         initiateGridComponents();
         registerController(gameController);
     }
+
     public void initiateGridComponents() {
         for (int i = 0; i < CHESSBOARD_ROW_SIZE.getNum(); i++) {
             for (int j = 0; j < CHESSBOARD_COL_SIZE.getNum(); j++) {
@@ -128,7 +132,7 @@ public class ChessboardComponent extends JComponent {
                 // TODO: Implement the initialization checkerboard
                 if (grid[i][j].getPiece() != null) {
                     ChessPiece chessPiece = grid[i][j].getPiece();
-                    if(gridComponents[i][j].getComponentCount()!=0) {
+                    if (gridComponents[i][j].getComponentCount() != 0) {
                         gridComponents[i][j].remove(0);
                     }
                     gridComponents[i][j].add(new ChessComponent(CHESS_SIZE, chessPiece));
@@ -136,6 +140,7 @@ public class ChessboardComponent extends JComponent {
             }
         }
     }
+
     public void registerController(GameController gameController) {
         this.gameController = gameController;
     }
@@ -159,39 +164,46 @@ public class ChessboardComponent extends JComponent {
     }
 
     private ChessboardPoint getChessboardPoint(Point point) {
-        System.out.println("[" + point.y/CHESS_SIZE +  ", " +point.x/CHESS_SIZE + "] Clicked");
-        return new ChessboardPoint(point.y/CHESS_SIZE, point.x/CHESS_SIZE);
+        System.out.println("[" + point.y / CHESS_SIZE + ", " + point.x / CHESS_SIZE + "] Clicked");
+        return new ChessboardPoint(point.y / CHESS_SIZE, point.x / CHESS_SIZE);
     }
+
     private Point calculatePoint(int row, int col) {
         return new Point(col * CHESS_SIZE, row * CHESS_SIZE);
     }
 
-    public void swapChess(){
+    public void swapChess() {
         if (whetherSwap == true) {
             gameController.onPlayerSwapChess();
-            this.whetherSwap = false;
-        }else
-            System.out.println("Please click the NextStep button");
+        } else {
+            JFrame reminder = new JFrame();
+            JOptionPane.showMessageDialog(reminder, "Please click the nextStep button to continue!");
+        }
+        if (gameController.swapOrNot == true)
+            whetherSwap = false;
     }
 
-    public void nextStep(){
+    public void nextStep() {
         gameController.onPlayerNextStep();
         this.whetherSwap = true;
     }
 
-    public void newChessboard(){
+    public void newChessboard() {
         gameController.newChessboard();
     }
-    public void Shuffle(){
+
+    public void Shuffle() {
         gameController.Shuffle();
     }
 
-    public void saveGameFromFile(String path){
+    public void saveGameFromFile(String path) {
         gameController.saveGameFromFile(path);
     }
-    public void loadGameFromFile(){
+
+    public void loadGameFromFile() {
         gameController.loadGameFromFile();
     }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -211,13 +223,16 @@ public class ChessboardComponent extends JComponent {
             }
         }
     }
-    public void check(){
-        if(getStep()>=MaxSteps&&getScores()<goalscores){
-            LoseFrame lose=new LoseFrame(769, 800);
+
+    public void check() {
+        if (getStep() >= MaxSteps && getScores() < goalscores) {
+            LoseFrame lose = new LoseFrame(769, 800);
             lose.setVisible(true);
-        }if(getStep()<MaxSteps&&getScores()>=goalscores){
-            winFrame win=new winFrame(750, 780);
+        }
+        if (getStep() < MaxSteps && getScores() >= goalscores) {
+            winFrame win = new winFrame(750, 780);
             win.setVisible(true);
+            win.setGameController(gameController);
         }
     }//在写结果
 }

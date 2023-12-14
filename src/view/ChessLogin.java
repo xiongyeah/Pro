@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import view.winFrame;
 
 public class ChessLogin extends JFrame {
 
@@ -19,7 +20,7 @@ public class ChessLogin extends JFrame {
         setSize(400,400);
         setLocationRelativeTo(null);
         setLayout(null);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addWelcome();
         addNormalButton();
         addHardButton();
@@ -28,7 +29,7 @@ public class ChessLogin extends JFrame {
     }
 
     private void addBack() {
-        ImageIcon bg=new ImageIcon(".\\src\\picture\\loginBackground.png");
+        ImageIcon bg=new ImageIcon("src/picture/loginBackground.png");
         JLabel back=new JLabel(bg);
         back.setBounds(0,0,400,500);
         back.setLocation(0,0);
@@ -58,6 +59,8 @@ public class ChessLogin extends JFrame {
                 ChessGameFrame mainFrame = new ChessGameFrame(1100, 810,10,350);
                 GameController gameController = new GameController(mainFrame.getChessboardComponent(), new Chessboard(0));
                 mainFrame.setVisible(true);
+                gameController.setGscores(350);
+                gameController.setMSteps(10);
             }
         });
         add(Normal);
@@ -65,7 +68,7 @@ public class ChessLogin extends JFrame {
 
     public void addHardButton() {
         UIManager.put("Button.background", Color.WHITE);
-        UIManager.put("Button.foreground", Color.GRAY);
+        UIManager.put("Button.foreground", Color.ORANGE);
         JButton Hard = new JButton("Hard");
         Hard.setFont(new Font("Rockwell", Font.BOLD, 12));
         Hard.setBounds(100, 200, 200, 50);
@@ -73,9 +76,11 @@ public class ChessLogin extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 UIManager.put("Button.foreground", Color.BLACK);
-                ChessGameFrame mainFrame = new ChessGameFrame(1100, 810,8,100);
+                ChessGameFrame mainFrame = new ChessGameFrame(1100, 810,20,900);
                 GameController gameController = new GameController(mainFrame.getChessboardComponent(), new Chessboard(0));
                 mainFrame.setVisible(true);
+                gameController.setGscores(900);
+                gameController.setMSteps(20);
             }
         });
         add(Hard);
@@ -91,9 +96,11 @@ public class ChessLogin extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 UIManager.put("Button.foreground", Color.BLACK);
-                ChessGameFrame mainFrame = new ChessGameFrame(1100, 810,8,100);
+                ChessGameFrame mainFrame = new ChessGameFrame(1100, 810,40,2000);
                 GameController gameController = new GameController(mainFrame.getChessboardComponent(), new Chessboard(0));
                 mainFrame.setVisible(true);
+                gameController.setGscores(2000);
+                gameController.setMSteps(40);
             }
         });
         add(Hell);

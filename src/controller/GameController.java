@@ -29,6 +29,15 @@ public class GameController implements GameListener {
     private ChessboardPoint selectedPoint;
     private ChessboardPoint selectedPoint2;
     public boolean whichNext = false;//记录按下nextStep按钮后是让棋子落下还是生成新棋子
+    public boolean swapOrNot;//记录是否交换成功
+    public int Gscores = 350;
+    public int MSteps = 10;
+    public void setGscores(int gscores){
+        this.Gscores = gscores;
+    }
+    public void setMSteps(int mSteps){
+        this.MSteps = mSteps;
+    }
 
     public GameController(ChessboardComponent view, Chessboard model) {
         this.view = view;
@@ -67,17 +76,23 @@ public class GameController implements GameListener {
                 model.setChessPiece(selectedPoint, p1);
                 model.setChessPiece(selectedPoint2, p2);
                 System.out.println("[" + selectedPoint.getRow() + "," + selectedPoint.getCol() + "] and [" + selectedPoint2.getRow() + "," + selectedPoint2.getCol() + "] can not be swapped.");
+                swapOrNot = false;
             } else {
                 remove(selectedPoint);
                 remove(selectedPoint2);
                 view.addStep(1);
                 view.check();
                 System.out.println("[" + selectedPoint.getRow() + "," + selectedPoint.getCol() + "] and [" + selectedPoint2.getRow() + "," + selectedPoint2.getCol() + "] have been swapped.");
+                swapOrNot = true;
             }
             view.labelStep.setText("Steps:" + view.getStep());
             view.labelScores.setText("Scores:" + view.getScores());
             view.initiateChessComponent(model);
             view.repaint();
+        } else {
+            JFrame reminder = new JFrame();
+            JOptionPane.showMessageDialog(reminder, "Please choose two chess to move!");
+            swapOrNot = false;
         }
     }
 
@@ -256,6 +271,32 @@ public class GameController implements GameListener {
         else {
             System.out.println("Nothing can be moved,please continue your next step.");
             view.setScores(staticScore);
+            boolean deadGame = false;//判断是否死局
+            for (int i = 0; i < 7; i++) {
+                for (int j = 0; j < 7; j++) {//判断是否死局
+                    var p1 = model.getChessPieceAt(new ChessboardPoint(i, j));
+                    var p2 = model.getChessPieceAt(new ChessboardPoint(i + 1, j));
+                    model.setChessPiece(new ChessboardPoint(i, j), p2);
+                    model.setChessPiece(new ChessboardPoint(i + 1, j), p1);
+                    if (whetherEnoughToRemove(new ChessboardPoint(i, j))) {
+                        deadGame = true;
+                    }
+                    model.setChessPiece(new ChessboardPoint(i, j), p1);
+                    model.setChessPiece(new ChessboardPoint(i + 1, j), p2);
+                    var p3 = model.getChessPieceAt(new ChessboardPoint(i, j + 1));
+                    model.setChessPiece(new ChessboardPoint(i, j), p3);
+                    model.setChessPiece(new ChessboardPoint(i, j + 1), p1);
+                    if (whetherEnoughToRemove(new ChessboardPoint(i, j))) {
+                        deadGame = true;
+                    }
+                    model.setChessPiece(new ChessboardPoint(i, j), p1);
+                    model.setChessPiece(new ChessboardPoint(i, j + 1), p3);
+                }
+            }
+            if (deadGame == false) {
+                JFrame reminder = new JFrame();
+                JOptionPane.showMessageDialog(reminder, "No more match chess,please use Shuffle!");
+            }
         }
         this.selectedPoint = null;
         this.selectedPoint2 = null;
@@ -264,10 +305,6 @@ public class GameController implements GameListener {
     // click a cell with a chess
     @Override
     public void onPlayerClickChessPiece(ChessboardPoint point, ChessComponent component) {
-        if (selectedPoint != null && selectedPoint2 != null){
-            System.out.println("Please click the NextStep button");
-            return;
-        }
         if (selectedPoint2 != null) {
             var distance2point1 = Math.abs(selectedPoint.getCol() - point.getCol()) + Math.abs(selectedPoint.getRow() - point.getRow());
             var distance2point2 = Math.abs(selectedPoint2.getCol() - point.getCol()) + Math.abs(selectedPoint2.getRow() - point.getRow());
@@ -332,99 +369,100 @@ public class GameController implements GameListener {
             component.repaint();
         }
     }
+
     public void saveGameFromFile(String path) {
-        try{
-            String filename="/Users/wanglingli/Documents/loads/"+path;
-            File file=new File(filename);
-            if(file.createNewFile()){
-                FileWriter writer=new FileWriter(file);
+        try {
+            String filename = "/Users/wanglingli/Documents/loads/" + path;
+            File file = new File(filename);
+            if (file.createNewFile()) {
+                FileWriter writer = new FileWriter(file);
                 System.out.println(filename);
-                String A=String.valueOf(view.getMaxSteps());
+                String A = String.valueOf(view.getMaxSteps());
                 writer.write(A);
                 writer.write("\n");
-                String B=String.valueOf(view.getGoalscores());
+                String B = String.valueOf(view.getGoalscores());
                 writer.write(B);
                 writer.write("\n");
-                String C=String.valueOf(view.step);
+                String C = String.valueOf(view.step);
                 writer.write(C);
                 writer.write("\n");
-                String D=String.valueOf(view.scores);
+                String D = String.valueOf(view.scores);
                 writer.write(D);
                 writer.write("\n");
                 for (int i = 0; i < Constant.CHESSBOARD_ROW_SIZE.getNum(); i++) {
                     for (int j = 0; j < Constant.CHESSBOARD_COL_SIZE.getNum(); j++) {
-                        if(model.getGrid()[i][j].getPiece().getName()==""){
+                        if (model.getGrid()[i][j].getPiece().getName() == "") {
                             writer.write("1");
-                        } else if (model.getGrid()[i][j].getPiece().getName()=="") {
+                        } else if (model.getGrid()[i][j].getPiece().getName() == "") {
                             writer.write("2");
-                        }else if (model.getGrid()[i][j].getPiece().getName()=="▲") {
+                        } else if (model.getGrid()[i][j].getPiece().getName() == "▲") {
                             writer.write("3");
-                        }else if (model.getGrid()[i][j].getPiece().getName()=="") {
+                        } else if (model.getGrid()[i][j].getPiece().getName() == "") {
                             writer.write("4");
                         }
                         writer.write(" ");
                     }
                     writer.write("\n");
                 }
-                String E=String.valueOf(view.getShuffleTime());
+                String E = String.valueOf(view.getShuffleTime());
                 writer.write(E);
                 writer.close();
                 System.out.println("success");
-            }else{
-                int n=JOptionPane.showConfirmDialog(null,"The name of file has existed, whether to substitute?","Warning",JOptionPane.YES_NO_OPTION);
-                if(n==0){
-                    FileWriter writer=new FileWriter(file);
-                    String A=String.valueOf(view.getMaxSteps());
+            } else {
+                int n = JOptionPane.showConfirmDialog(null, "The name of file has existed, whether to substitute?", "Warning", JOptionPane.YES_NO_OPTION);
+                if (n == 0) {
+                    FileWriter writer = new FileWriter(file);
+                    String A = String.valueOf(view.getMaxSteps());
                     writer.write(A);
                     writer.write("\n");
-                    String B=String.valueOf(view.getGoalscores());
+                    String B = String.valueOf(view.getGoalscores());
                     writer.write(B);
                     writer.write("\n");
-                    String C=String.valueOf(view.step);
+                    String C = String.valueOf(view.step);
                     writer.write(C);
                     writer.write("\n");
-                    String D=String.valueOf(view.scores);
+                    String D = String.valueOf(view.scores);
                     writer.write(D);
                     writer.write("\n");
                     for (int i = 0; i < Constant.CHESSBOARD_ROW_SIZE.getNum(); i++) {
                         for (int j = 0; j < Constant.CHESSBOARD_COL_SIZE.getNum(); j++) {
-                            if(model.getGrid()[i][j].getPiece().getName()==""){
+                            if (model.getGrid()[i][j].getPiece().getName() == "") {
                                 writer.write("1");
-                            } else if (model.getGrid()[i][j].getPiece().getName()=="") {
+                            } else if (model.getGrid()[i][j].getPiece().getName() == "") {
                                 writer.write("2");
-                            }else if (model.getGrid()[i][j].getPiece().getName()=="▲") {
+                            } else if (model.getGrid()[i][j].getPiece().getName() == "▲") {
                                 writer.write("3");
-                            }else if (model.getGrid()[i][j].getPiece().getName()=="") {
+                            } else if (model.getGrid()[i][j].getPiece().getName() == "") {
                                 writer.write("4");
                             }
                             writer.write(" ");
                         }
                         writer.write("\n");
                     }
-                    String E=String.valueOf(view.getShuffleTime());
+                    String E = String.valueOf(view.getShuffleTime());
                     writer.write(E);
                     writer.close();
                 }
             }
-        }catch(IOException e){
+        } catch (IOException e) {
             System.out.println("no");
             e.printStackTrace();
         }
     }
 
-    public void loadGameFromFile(){
+    public void loadGameFromFile() {
         File file = new File("/Users/wanglingli/Documents/loads");
         File[] tempList = file.listFiles();
-        if(tempList.length==0){
-            JOptionPane.showMessageDialog(null,"No existing loads","WARNING",JOptionPane.ERROR_MESSAGE);
-        }else {
+        if (tempList.length == 0) {
+            JOptionPane.showMessageDialog(null, "No existing loads", "WARNING", JOptionPane.ERROR_MESSAGE);
+        } else {
             Object[] filenames = new String[tempList.length];
             for (int i = 0; i < tempList.length; i++) {
                 if (tempList[i].isFile()) {
                     filenames[i] = tempList[i].getName();
                 }
             }
-            String A=(String) JOptionPane.showInputDialog(null, "The load you want", "Read load", JOptionPane.QUESTION_MESSAGE,null, filenames, filenames[filenames.length - 1]);
+            String A = (String) JOptionPane.showInputDialog(null, "The load you want", "Read load", JOptionPane.QUESTION_MESSAGE, null, filenames, filenames[filenames.length - 1]);
             try (Scanner sc = new Scanner(new FileReader("/Users/wanglingli/Documents/loads/" + A))) {
                 view.setMaxSteps(sc.nextInt());
                 view.lableMaxSteps.setText("MaxSteps:" + view.getMaxSteps());
@@ -454,14 +492,16 @@ public class GameController implements GameListener {
                     }
                 }
                 view.setShuffleTime(sc.nextInt());
-                view.shuffle.setText("Shuffle!\n"+view.getShuffleTime());
+                view.shuffle.setText("Shuffle!\n" + view.getShuffleTime());
                 view.initiateChessComponent(model);
                 view.repaint();
             } catch (IOException ex) {
                 System.out.println("no");
             }
         }
-    };
+    }
+
+    ;
 
     public void newChessboard() {
         view.setStep(0);
