@@ -18,7 +18,7 @@ public enum Constant {
 
     static Map<String, Color> colorMap = new HashMap<>(){{
         put("💎",Color.blue);
-        put("⚪",Color.white);
+        put("⚪",Color.gray);
         put("▲",Color.green);
         put("🔶",Color.orange);
     }};
